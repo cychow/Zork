@@ -34,11 +34,11 @@ public:
 class zorkRoom: public zorkObj {
 public:
 	std::string type; // should init to regular
-	std::vector<border> borders;
-	std::vector<zorkContainer> containers;
-	std::vector<zorkItem> items;
-	std::vector<zorkCreature> creatures;
-	std::vector<zorkTrigger> triggers;
+	std::vector<border *> borderList;
+	std::vector<std::string> containerList;
+	std::vector<std::string> itemList;
+	std::vector<std::string> creatureList;
+	std::vector<std::string> triggerList;
 	zorkRoom(tinyxml2::XMLElement *);
 
 };

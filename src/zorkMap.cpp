@@ -21,6 +21,7 @@ zorkMap::zorkMap(tinyxml2::XMLDocument * mapDoc) {
    if (strcmp(root->Name(),"map") != 0) {
 	  std::cerr << "ERROR:\tUnexpected first node; expected 'map' got '" << root->Name() << "'." << std::endl;
    }
+   std::cout << "--- Populating map ---" << std::endl;
    // Parse all objects in map
    for (tinyxml2::XMLElement * child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()) {
 		//std::cout << child->Name() << std::endl;
@@ -38,6 +39,7 @@ zorkMap::zorkMap(tinyxml2::XMLDocument * mapDoc) {
 		   // something went wrong
 		   std::cerr << "ERROR:\tUnexpected node name: got '" << child->Name() << "'." << std::endl;
 		}
+		std::cout << "----------------------" << std::endl;
    }
 
 

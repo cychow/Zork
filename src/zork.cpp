@@ -1,5 +1,4 @@
 // debug flag; comment to hide debug things
-#define DEBUG
 
 #ifndef VECTOR_H
 #define VECTOR_H
