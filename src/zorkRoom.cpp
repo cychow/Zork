@@ -11,6 +11,8 @@
 #include <vector>
 #include <iostream>
 
+static void generateList(tinyxml2::XMLElement * root, std::vector<std::string> &list, std::string elementName);
+
 zorkRoom::zorkRoom (tinyxml2::XMLElement * node) {
 	// create room
 	// get name
@@ -46,7 +48,26 @@ zorkRoom::zorkRoom (tinyxml2::XMLElement * node) {
 	for(tinyxml2::XMLElement * element = node->FirstChildElement("border"); element != NULL; element = element->NextSiblingElement("border")) {
 		borderList.push_back(new border(element));
 	}
+	// iterate through containterList
+	generateList(node, containerList, "container");
+	// iterate through itemList
+	generateList(node, itemList, "item");
+//	for (auto iter = itemList.begin(); iter != itemList.end(); ++iter) {
+//		std::cout << *iter << std::endl;
+//	}
+	// populate creature and triggerlist
+	generateList(node, creatureList, "creature");
+	generateList(node, triggerList, "trigger");
 
+
+
+}
+
+static void generateList(tinyxml2::XMLElement * root, std::vector<std::string> &list, std::string elementName) {
+	for(tinyxml2::XMLElement * element = root->FirstChildElement(elementName.c_str()); element != NULL; element = element->NextSiblingElement(elementName.c_str())) {
+		std::cout << "--: " << elementName << ": " << element->GetText() << std::endl;
+		list.push_back(element->GetText());
+	}
 }
 
 border::border(tinyxml2::XMLElement * node) {
