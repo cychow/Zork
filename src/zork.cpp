@@ -52,6 +52,15 @@ int main(int argc, char* argv[]) {
 	// get first room
 	state->currentRoom = map->findRoom("Entrance");
 	// display the first room's description
+	// store inventory pointer in gamestate
+	//find inventory
+	for(auto iter = map->containerList.begin(); iter != map->containerList.end(); ++iter) {
+		if (!(*iter)->name.compare("inventory")) {
+			state->inventory = *iter;
+			break;
+		}
+	}
+
 	state->currentRoom->printDescription();
 	while (!state->won) {
 		std::getline(std::cin, lastCommand);
@@ -174,6 +183,30 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 		}
 		std::cout << "Can't go that way." << std::endl;
 		return;
+	}
+	// do a take
+	if (lastCommand.find("take") == 0) {
+		if (lastCommand.erase(lastCommand.find_last_not_of(" \n\r\t")+1).length() == 4) {
+			std::cout << "Take what?" << std::endl;
+			return;
+		} else {
+			std::string itemToFind = lastCommand.substr(5);
+			std::cout << "Attempting to take " << itemToFind << std::endl;
+			for(auto iter = state->currentRoom->itemList.begin(); iter != state->currentRoom->itemList.end(); ++iter) {
+				if (!(*iter).compare(itemToFind)) {
+					//found the item in the room
+					// put item into inventory
+					state->inventory->itemList.push_back(itemToFind);
+					// remove item from room
+					state->currentRoom->itemList.erase(iter);
+					std::cout << "Item " << itemToFind << " added to inventory." << std::endl;
+					return;
+				}
+			}
+			// check containers in the room
+			std::cout << "You can't see a " << itemToFind << " here." << std::endl;
+			return;
+		}
 	}
 
 	std::cout << "Error" << std::endl;

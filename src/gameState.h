@@ -18,6 +18,7 @@ public:
 	bool won;
 	zorkMap * map;
 	zorkRoom * currentRoom;
+	zorkContainer * inventory;
 };
 
 
