@@ -8,14 +8,12 @@
 #include <iostream>
 #endif
 
-#ifndef STRING_H
-#define STRING_H
-#include <string>
-#endif
+#include "zorkMap.h"
+#include "zorkObj.h"
 
 //using namespace std;
 int main(int argc, char* argv[]) {
-   tinyxml2::XMLDocument map;
+   tinyxml2::XMLDocument * mapDoc = new tinyxml2::XMLDocument();
    std::string filename;
    // load XML file
    if (argc !=2) {
@@ -25,10 +23,10 @@ int main(int argc, char* argv[]) {
       std::cout << "Loading file: " << argv[1] << std::endl;
       filename = argv[1];
    }
-   tinyxml2::XMLError errType = map.LoadFile(filename.c_str());
+   tinyxml2::XMLError errType = mapDoc->LoadFile(filename.c_str());
    if (errType != 0) {
       std::cerr << "ERROR:\tFailed to parse " << filename << "; error " << errType << ": ";
-      std::cerr << map.ErrorName() << std::endl;
+      std::cerr << mapDoc->ErrorName() << std::endl;
       //std::cerr << map.GetErrorStr2() << std::endl;
       return 1;
    } else {
@@ -36,12 +34,8 @@ int main(int argc, char* argv[]) {
    }
    
    // Check if root node is map
-   tinyxml2::XMLElement * root = map.RootElement();
-   if (strcmp(root->Name(),"map") != 0) {
-      std::cerr << "ERROR:\tUnexpected first node; expected 'map' got '" << root->Name() << "'." << std::endl;
-      return 1;
-   }
    
-   // Parse all objects in map
+   zorkMap::zorkMap * map = new zorkMap::zorkMap(mapDoc);
+
    return 0;
 }
