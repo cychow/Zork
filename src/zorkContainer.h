@@ -19,6 +19,7 @@ public:
 	std::vector<std::string> acceptList;
 	std::vector<std::string> itemList;
 	zorkContainer(tinyxml2::XMLElement *);
+	zorkContainer();
 };
 
 #endif /* ZORKCONTAINER_H_ */

@@ -38,6 +38,9 @@ public:
 	std::vector<std::string> containerList;
 	std::vector<std::string> itemList;
 	std::vector<std::string> creatureList;
+	bool visited;
+
+	void printDescription(bool descriptive = false);
 	zorkRoom(tinyxml2::XMLElement *);
 
 };

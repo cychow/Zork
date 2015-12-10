@@ -16,7 +16,7 @@ static void generateList(tinyxml2::XMLElement * root, std::vector<std::string> &
 
 zorkRoom::zorkRoom (tinyxml2::XMLElement * node) : zorkObj(node) {
 	// create room
-
+	visited = false;
 	// get type
 	if (node->FirstChildElement("type") != NULL) {
 		type = node->FirstChildElement("type")->GetText();
@@ -47,4 +47,13 @@ border::border(tinyxml2::XMLElement * node) {
 	name = node->FirstChildElement("name")->GetText();
 	direction = node->FirstChildElement("direction")->GetText();
 	std::cout << "--: border: " << direction << " to " << name << std::endl;
+}
+
+void zorkRoom::printDescription(bool descriptive) {
+	if (visited && !descriptive)  {
+		std::cout << name << std::endl;
+	} else {
+		std::cout << description << std::endl;
+		visited = true;
+	}
 }

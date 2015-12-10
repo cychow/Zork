@@ -25,12 +25,13 @@
 class zorkMap {
 public:
 	// make a vector of rooms
+	std::vector<zorkObj *> objectList;
 	std::vector<zorkRoom*> roomList;
 	std::vector<zorkItem *> itemList;
 	std::vector<zorkContainer *> containerList;
 	std::vector<zorkCreature *> creatureList;
-
 	zorkMap (tinyxml2::XMLDocument * mapDoc);
+	zorkRoom * findRoom(std::string name);
 
 };
 

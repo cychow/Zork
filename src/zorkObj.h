@@ -25,6 +25,7 @@ public:
 	std::string status;
 	std::vector<zorkTrigger *> triggerList;
 	zorkObj(tinyxml2::XMLElement * element);
+	zorkObj();
 };
 
 #endif /* ZORKOBJ_H_ */

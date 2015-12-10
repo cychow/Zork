@@ -19,3 +19,6 @@ zorkContainer::zorkContainer(tinyxml2::XMLElement * element) : zorkObj(element) 
 	generateList(element, acceptList, "accept");
 }
 
+zorkContainer::zorkContainer() {
+
+}

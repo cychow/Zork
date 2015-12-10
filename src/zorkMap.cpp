@@ -23,25 +23,38 @@ zorkMap::zorkMap(tinyxml2::XMLDocument * mapDoc) {
 	}
 	std::cout << "--- Populating map ---" << std::endl;
 	// Parse all objects in map
+	// initialize inventory
+	zorkContainer * inventory = new zorkContainer();
+	inventory->name = "inventory";
+	containerList.push_back(inventory);
+	objectList.push_back((zorkObj*)inventory);
 	for (tinyxml2::XMLElement * child = root->FirstChildElement(); child != NULL; child = child->NextSiblingElement()) {
 		//std::cout << child->Name() << std::endl;
 		if (!strcmp(child->Name(), "room")) {
 			// Do room thing
 			// zorkRoom room = new zorkRoom(child);
 			std::cout << "-: Creating room " << std::endl;
-			roomList.push_back(new zorkRoom(child));
+			auto room = new zorkRoom(child);
+			roomList.push_back(room);
+			objectList.push_back((zorkObj*)room);
 		} else if (!strcmp(child->Name(), "item")) {
 			// Do item thing
 			std::cout << "-: Creating item " << std::endl;
-			itemList.push_back(new zorkItem(child));
+			auto item = new zorkItem(child);
+			itemList.push_back(item);
+			objectList.push_back((zorkObj*)item);
 		} else if (!strcmp(child->Name(), "container")) {
 			// Do container thing
 			std::cout << "-: Creating container " << std::endl;
-			containerList.push_back(new zorkContainer(child));
+			auto container = new zorkContainer(child);
+			containerList.push_back(container);
+			objectList.push_back((zorkObj*)container);
 		} else if (!strcmp(child->Name(), "creature")) {
 			// Do creature thing
 			std::cout << "-: Creating creature " << std::endl;
-			creatureList.push_back(new zorkCreature(child));
+			auto creature = new zorkCreature(child);
+			creatureList.push_back(creature);
+			objectList.push_back((zorkObj*)creature);
 		} else {
 			// something went wrong
 			std::cerr << "ERROR:\tUnexpected node name: got '" << child->Name() << "'." << std::endl;
@@ -50,4 +63,13 @@ zorkMap::zorkMap(tinyxml2::XMLDocument * mapDoc) {
    }
 
 
+}
+
+zorkRoom * zorkMap::findRoom(std::string name) {
+	for (auto room = roomList.begin(); room != roomList.end(); ++room) {
+		if (!(*room)->name.compare(name)) {
+			return *room;
+		}
+	}
+	return NULL;
 }

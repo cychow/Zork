@@ -10,28 +10,32 @@
 #include <iostream>
 #include <string>
 
-
+zorkObj::zorkObj() {
+	name = "";
+	status = "";
+	description = "";
+}
 
 zorkObj::zorkObj(tinyxml2::XMLElement * node) {
 	// get name
 	if (node->FirstChildElement("name") != NULL) {
 		name = node->FirstChildElement("name")->GetText();
 	} else {
-		name = "unnamed";
+		name = "";
 	}
 	std::cout << "--: name: " << name << std::endl;
 	// get status
 	if (node->FirstChildElement("status") != NULL) {
 		status = node->FirstChildElement("status")->GetText();
 	} else {
-		status = "none";
+		status = "";
 	}
 	std::cout << "--: status: '" << status << "'" << std::endl;
 	// get description
 	if (node->FirstChildElement("description") != NULL) {
 		description = node->FirstChildElement("description")->GetText();
 	} else {
-		description = "nondescript";
+		description = "";
 	}
 	std::cout << "--: description: '" << description << "'" << std::endl;
 
@@ -40,3 +44,4 @@ zorkObj::zorkObj(tinyxml2::XMLElement * node) {
 	}
 
 }
+
