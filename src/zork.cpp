@@ -208,6 +208,22 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 			return;
 		}
 	}
+	if (!lastCommand.compare("i")) {
+		bool firstItem = true;
+		std::cout << "Inventory: ";
+		if (state->inventory->itemList.size() == 0) {
+			std::cout << "empty" << std::endl;
+			return;
+		}
+		for (auto iter = state->inventory->itemList.begin(); iter != state->inventory->itemList.end(); ++iter) {
+			if (!firstItem) {
+				std::cout << ", ";
+			}
+			std::cout << (*iter);
+		}
+		std::cout << std::endl;
+		return;
+	}
 
 	std::cout << "Error" << std::endl;
 }
