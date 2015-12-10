@@ -38,7 +38,7 @@ public:
 	std::vector<std::string> containerList;
 	std::vector<std::string> itemList;
 	std::vector<std::string> creatureList;
-	std::vector<std::string> triggerList;
+	std::vector<zorkTrigger *> triggerList;
 	zorkRoom(tinyxml2::XMLElement *);
 
 };

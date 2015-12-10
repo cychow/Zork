@@ -57,11 +57,16 @@ zorkRoom::zorkRoom (tinyxml2::XMLElement * node) {
 //	}
 	// populate creature and triggerlist
 	generateList(node, creatureList, "creature");
-	generateList(node, triggerList, "trigger");
+
+	for(tinyxml2::XMLElement * element = node->FirstChildElement("trigger"); element != NULL; element = element->NextSiblingElement("trigger")) {
+		triggerList.push_back(new zorkTrigger(element));
+	}
 
 
 
 }
+#ifndef GENERATOR
+#define GENERATOR
 
 static void generateList(tinyxml2::XMLElement * root, std::vector<std::string> &list, std::string elementName) {
 	for(tinyxml2::XMLElement * element = root->FirstChildElement(elementName.c_str()); element != NULL; element = element->NextSiblingElement(elementName.c_str())) {
@@ -69,6 +74,8 @@ static void generateList(tinyxml2::XMLElement * root, std::vector<std::string> &
 		list.push_back(element->GetText());
 	}
 }
+
+#endif
 
 border::border(tinyxml2::XMLElement * node) {
 	name = node->FirstChildElement("name")->GetText();
