@@ -5,8 +5,14 @@
  *      Author: cchow
  */
 
+#include <vector>
+#include <string>
+
 #ifndef ZORKITEM_H_
 #define ZORKITEM_H_
 
+class zorkItem : public zorkObj {
+
+};
 
 #endif /* ZORKITEM_H_ */

@@ -8,5 +8,8 @@
 #ifndef ZORKCREATURE_H_
 #define ZORKCREATURE_H_
 
+class zorkCreature : public zorkObj {
+
+};
 
 #endif /* ZORKCREATURE_H_ */

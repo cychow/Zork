@@ -1,3 +1,11 @@
+// debug flag; comment to hide debug things
+#define DEBUG
+
+#ifndef VECTOR_H
+#define VECTOR_H
+#include <vector>
+#endif
+
 #ifndef TINYXML2_H
 #define TINYXML2_H
 #include "tinyxml2/tinyxml2.h"
@@ -32,10 +40,7 @@ int main(int argc, char* argv[]) {
    } else {
       std::cout << "Successfully loaded " << filename << std::endl;
    }
-   
-   // Check if root node is map
-   
    zorkMap::zorkMap * map = new zorkMap::zorkMap(mapDoc);
-
+   delete(map);
    return 0;
 }

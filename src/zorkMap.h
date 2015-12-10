@@ -8,6 +8,8 @@
 #ifndef ZORKMAP_H_
 #define ZORKMAP_H_
 
+#include <vector>
+#include <string>
 #include "tinyxml2/tinyxml2.h"
 #include "zorkObj.h"
 #include "zorkRoom.h"
@@ -20,6 +22,12 @@
 
 class zorkMap {
 public:
+	// make a vector of rooms
+	std::vector<zorkRoom*> roomList;
+	std::vector<zorkItem *> itemList;
+	std::vector<zorkContainer *> containerList;
+	std::vector<zorkCreature *> creatureList;
+
 	zorkMap (tinyxml2::XMLDocument * mapDoc);
 
 };
