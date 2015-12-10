@@ -13,29 +13,9 @@
 
 static void generateList(tinyxml2::XMLElement * root, std::vector<std::string> &list, std::string elementName);
 
-zorkRoom::zorkRoom (tinyxml2::XMLElement * node) {
+zorkRoom::zorkRoom (tinyxml2::XMLElement * node) : zorkObj(node) {
 	// create room
-	// get name
-	if (node->FirstChildElement("name") != NULL) {
-		name = node->FirstChildElement("name")->GetText();
-	} else {
-		name = "unnamed";
-	}
-	std::cout << "-: Creating room '" << name << "'" << std::endl;
-	// get status
-	if (node->FirstChildElement("status") != NULL) {
-		status = node->FirstChildElement("status")->GetText();
-	} else {
-		status = "none";
-	}
-	std::cout << "--: status: '" << status << "'" << std::endl;
-	// get description
-	if (node->FirstChildElement("description") != NULL) {
-		description = node->FirstChildElement("description")->GetText();
-	} else {
-		description = "nondescript";
-	}
-	std::cout << "--: description: '" << description << "'" << std::endl;
+
 	// get type
 	if (node->FirstChildElement("type") != NULL) {
 		type = node->FirstChildElement("type")->GetText();

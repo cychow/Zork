@@ -21,9 +21,7 @@ public:
 	std::string name;
 	std::string description;
 	std::string status;
-
-
-
+	zorkObj(tinyxml2::XMLElement * element);
 };
 
 #endif /* ZORKOBJ_H_ */
