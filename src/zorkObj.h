@@ -16,11 +16,14 @@
 #include "tinyxml2/tinyxml2.h"
 #endif
 
+
+#include "zorkTrigger.h"
 class zorkObj {
 public:
 	std::string name;
 	std::string description;
 	std::string status;
+	std::vector<zorkTrigger *> triggerList;
 	zorkObj(tinyxml2::XMLElement * element);
 };
 

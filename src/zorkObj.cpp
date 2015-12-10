@@ -34,4 +34,9 @@ zorkObj::zorkObj(tinyxml2::XMLElement * node) {
 		description = "nondescript";
 	}
 	std::cout << "--: description: '" << description << "'" << std::endl;
+
+	for(tinyxml2::XMLElement * element = node->FirstChildElement("trigger"); element != NULL; element = element->NextSiblingElement("trigger")) {
+		triggerList.push_back(new zorkTrigger(element));
+	}
+
 }

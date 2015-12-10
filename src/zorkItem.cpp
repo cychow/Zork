@@ -20,10 +20,6 @@ zorkItem::zorkItem(tinyxml2::XMLElement * element) : zorkObj(element) {
 	}
 
 	std::cout << "--: writing: " << writing << std::endl;
-
-	for(tinyxml2::XMLElement * triggerNode = element->FirstChildElement("trigger"); triggerNode != NULL; triggerNode = triggerNode->NextSiblingElement("trigger")) {
-		triggerList.push_back(new zorkTrigger(triggerNode));
-	}
 	if (element->FirstChildElement("turnon") != NULL) {
 		turnon = new zorkTurnOn(element->FirstChildElement("turnon"));
 	} else {

@@ -16,6 +16,8 @@
 #include "zorkItem.h"
 #include "zorkContainer.h"
 #include "zorkCreature.h"
+#include "zorkTrigger.h"
+#include "zorkAttack.h"
 
 
 // Main map class; contains all the rooms, items, containers, and creatures

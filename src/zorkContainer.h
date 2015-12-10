@@ -11,10 +11,14 @@
 #include <vector>
 #include <string>
 
+#include "tinyxml2/tinyxml2.h"
 #include "zorkObj.h"
 
 class zorkContainer : public zorkObj {
 public:
+	std::vector<std::string> acceptList;
+	std::vector<std::string> itemList;
+	zorkContainer(tinyxml2::XMLElement *);
 };
 
 #endif /* ZORKCONTAINER_H_ */

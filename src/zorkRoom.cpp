@@ -7,6 +7,7 @@
 
 #include "zorkRoom.h"
 #include "tinyxml2/tinyxml2.h"
+#include "generator.h"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -38,24 +39,9 @@ zorkRoom::zorkRoom (tinyxml2::XMLElement * node) : zorkObj(node) {
 	// populate creature and triggerlist
 	generateList(node, creatureList, "creature");
 
-	for(tinyxml2::XMLElement * element = node->FirstChildElement("trigger"); element != NULL; element = element->NextSiblingElement("trigger")) {
-		triggerList.push_back(new zorkTrigger(element));
-	}
-
 
 
 }
-#ifndef GENERATOR
-#define GENERATOR
-
-static void generateList(tinyxml2::XMLElement * root, std::vector<std::string> &list, std::string elementName) {
-	for(tinyxml2::XMLElement * element = root->FirstChildElement(elementName.c_str()); element != NULL; element = element->NextSiblingElement(elementName.c_str())) {
-		std::cout << "--: " << elementName << ": " << element->GetText() << std::endl;
-		list.push_back(element->GetText());
-	}
-}
-
-#endif
 
 border::border(tinyxml2::XMLElement * node) {
 	name = node->FirstChildElement("name")->GetText();

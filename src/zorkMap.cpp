@@ -36,8 +36,12 @@ zorkMap::zorkMap(tinyxml2::XMLDocument * mapDoc) {
 			itemList.push_back(new zorkItem(child));
 		} else if (!strcmp(child->Name(), "container")) {
 			// Do container thing
+			std::cout << "-: Creating container " << std::endl;
+			containerList.push_back(new zorkContainer(child));
 		} else if (!strcmp(child->Name(), "creature")) {
 			// Do creature thing
+			std::cout << "-: Creating creature " << std::endl;
+			creatureList.push_back(new zorkCreature(child));
 		} else {
 			// something went wrong
 			std::cerr << "ERROR:\tUnexpected node name: got '" << child->Name() << "'." << std::endl;
