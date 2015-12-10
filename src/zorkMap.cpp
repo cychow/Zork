@@ -28,9 +28,11 @@ zorkMap::zorkMap(tinyxml2::XMLDocument * mapDoc) {
 		if (!strcmp(child->Name(), "room")) {
 			// Do room thing
 			// zorkRoom room = new zorkRoom(child);
+			std::cout << "-: Creating room " << std::endl;
 			roomList.push_back(new zorkRoom(child));
 		} else if (!strcmp(child->Name(), "item")) {
 			// Do item thing
+			std::cout << "-: Creating item " << std::endl;
 			itemList.push_back(new zorkItem(child));
 		} else if (!strcmp(child->Name(), "container")) {
 			// Do container thing

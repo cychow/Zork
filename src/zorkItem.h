@@ -24,7 +24,7 @@ public:
 class zorkItem : public zorkObj {
 public:
 	std::string writing;
-	std::string turnon;
+	zorkTurnOn * turnon;
 	std::vector<zorkTrigger *> triggerList;
 	zorkItem(tinyxml2::XMLElement *);
 };

@@ -19,7 +19,7 @@ zorkObj::zorkObj(tinyxml2::XMLElement * node) {
 	} else {
 		name = "unnamed";
 	}
-	std::cout << "-: Creating room '" << name << "'" << std::endl;
+	std::cout << "--: name: " << name << std::endl;
 	// get status
 	if (node->FirstChildElement("status") != NULL) {
 		status = node->FirstChildElement("status")->GetText();
