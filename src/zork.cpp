@@ -367,6 +367,7 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 
 
 	for (auto trigger = allTriggers->begin(); trigger != allTriggers->end(); ++trigger) {
+		//std::cout << "Checking next trigger " << std::endl;
 		// IF the trigger is not triggered and is of type single, or if the trigger is permanent
 		if ((!((*trigger)->triggered) && ((*trigger)->type).compare("permanent")) || !((*trigger)->type).compare("permanent")) {
 			bool doTrigger = false;
@@ -442,27 +443,27 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				//std::cout << (*trigger)->command << "|" << lastCommand << std::endl;
 				continue;
 			}
-			if (!(lastCommand.compare((*trigger)->command)) && (doTrigger) && interceptCommands) {
+			if (!(lastCommand.compare((*trigger)->command)) && (doTrigger) && interceptCommands && !(*trigger)->command.empty()) {
 				std::cout << "Intercepted command " << lastCommand << std::endl;
 				//intercept the command by returning before you do things if it matches and conditions are met
 				for (auto iter = (*trigger)->printList.begin(); iter != (*trigger)->printList.end(); ++iter) {
 					std::cout << *iter << std::endl;
 				}
 				for (auto iter = (*trigger)->actionList.begin(); iter != (*trigger)->actionList.end(); ++iter) {
+					//std::cout << "CHECKING TRIGGERS AFTER ACTIVATING " << (*iter) << std::endl;
 					parseCommand(map, state, (*iter));
-					//std::cout << "CHECKING TRIGGERS AFTER ACTIVATING THIS COMMAND!" << std::endl;
 					checkTriggers(map, state, "", false);
 				}
 				intercepted = true;
 				continue;
-			} else if (doTrigger && !interceptCommands && (lastCommand.compare((*trigger)->command))) {
+			} else if (doTrigger) {
 				// do command and do trigger actions by falling through to parsing
 				for (auto iter = (*trigger)->printList.begin(); iter != (*trigger)->printList.end(); ++iter) {
 					std::cout << *iter << std::endl;
 				}
-				for (auto iter = (*trigger)->actionList.begin(); iter != (*trigger)->printList.end(); ++iter) {
+				for (auto iter = (*trigger)->actionList.begin(); iter != (*trigger)->actionList.end(); ++iter) {
+					//std::cout << "CHECKING TRIGGERS AFTER ACTIVATING " << (*iter) << std::endl;
 					parseCommand(map, state, (*iter));
-					//std::cout << "CHECKING TRIGGERS AFTER ACTIVATING THIS COMMAND!" << std::endl;
 					checkTriggers(map, state, "", false);
 				}
 				continue;

@@ -67,12 +67,9 @@ zorkTrigger::zorkTrigger(tinyxml2::XMLElement * element) {
 	std::cout << "--: trigger." << std::endl;
 	std::cout << "---: type: " << type << std::endl;
 	std::cout << "---: command: " << command << std::endl;
-	if (element->FirstChildElement("print") != NULL) {
-		generateList(element, printList, "print");
-	}
-	if (element->FirstChildElement("action") != NULL) {
-		generateList(element, actionList, "action");
-	}
+
+	generateList(element, printList, "print");
+	generateList(element, actionList, "action");
 	if (element->FirstChildElement("condition") != NULL) {
 		conditions = new zorkCondition(element->FirstChildElement("condition"));
 	} else {
