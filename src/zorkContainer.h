@@ -16,6 +16,7 @@
 
 class zorkContainer : public zorkObj {
 public:
+	bool isOpen;
 	std::vector<std::string> acceptList;
 	std::vector<std::string> itemList;
 	zorkContainer(tinyxml2::XMLElement *);

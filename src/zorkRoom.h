@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #ifndef ZORKROOM_H_
 #define ZORKROOM_H_
@@ -35,6 +36,7 @@ class zorkRoom: public zorkObj {
 public:
 	std::string type; // should init to regular
 	std::vector<border *> borderList;
+	std::map<std::string, border *> borderMap;
 	std::vector<std::string> containerList;
 	std::vector<std::string> itemList;
 	std::vector<std::string> creatureList;

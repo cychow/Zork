@@ -15,6 +15,9 @@
 #include <iostream>
 #endif
 
+#include <algorithm>
+#include <map>
+
 #include "zorkMap.h"
 #include "zorkObj.h"
 #include "gameState.h"
@@ -73,6 +76,7 @@ int main(int argc, char* argv[]) {
 
 void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 	// Check for triggers
+	// TODO: Check for triggers on items/things in the room
 	std::cout << "Checking for triggers " << std::endl;
 	for (auto trigger = state->currentRoom->triggerList.begin(); trigger != state->currentRoom->triggerList.end(); ++trigger) {
 		// IF the trigger is not triggered and is of type single, or if the trigger is permanent
@@ -204,10 +208,29 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 				}
 			}
 			// check containers in the room
+			for(auto iterContainerString = state->currentRoom->containerList.begin(); iterContainerString != state->currentRoom->containerList.end(); ++iterContainerString) {
+				auto iterContainer = map->containerMap.find((*iterContainerString));
+				if((iterContainer != (map->containerMap.end()))) {
+					//found the container
+					for(auto iterItem = (*iterContainer).second->itemList.begin(); iterItem != (*iterContainer).second->itemList.end(); ++iterItem) {
+						if (!(*iterItem).compare(itemToFind)) {
+							//found the item
+							state->inventory->itemList.push_back(itemToFind);
+							// remove item from container
+							if ((*iterContainer).second->isOpen) {
+								(*iterContainer).second->itemList.erase(iterItem);
+								std::cout << "Item " << itemToFind << " added to inventory." << std::endl;
+								return;
+							}
+						}
+					}
+				}
+			}
 			std::cout << "You can't see a " << itemToFind << " here." << std::endl;
 			return;
 		}
 	}
+	// inventory
 	if (!lastCommand.compare("i")) {
 		bool firstItem = true;
 		std::cout << "Inventory: ";
@@ -224,6 +247,57 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 		std::cout << std::endl;
 		return;
 	}
+	// open
+	if (lastCommand.find("open") == 0) {
+		if (lastCommand.erase(lastCommand.find_last_not_of(" \n\r\t")+1).length() == 4) {
+			std::cout << "Open what?" << std::endl;
+			return;
+		} else {
+			std::string containertoOpen = lastCommand.substr(5);
+			if ((map->containerMap.count(containertoOpen)>0)  && (std::find(state->currentRoom->containerList.begin(), state->currentRoom->containerList.end(), containertoOpen) != state->currentRoom->containerList.end())) {
+				auto targetContainer = (map->containerMap)[containertoOpen];
+				std::cout << containertoOpen;
+				if (targetContainer->itemList.size() != 0) {
+					bool first = true;
+					for (auto iter = targetContainer->itemList.begin(); iter != targetContainer->itemList.end(); ++iter) {
+						if (!first) {
+							first = false;
+							std::cout << ", ";
+						} else {
+							std::cout << " contains ";
+						}
+						std::cout << (*iter);
+					}
+					std::cout << "." << std::endl;
+				} else {
+					std::cout << " is empty." << std::endl;
+				}
+				return;
+			} else {
+				std::cout << "Can't find a " << containertoOpen << " to open." << std::endl;
+				return;
+			}
+		}
+	}
 
+	// read command
+	if (lastCommand.find("read") == 0) {
+		if (lastCommand.erase(lastCommand.find_last_not_of(" \n\r\t")+1).length() == 4) {
+			std::cout << "Read what?" << std::endl;
+			return;
+		} else {
+			std::string itemToRead = lastCommand.substr(5);
+			// read objects in inventory
+			auto iter = std::find(state->inventory->itemList.begin(), state->inventory->itemList.end(), itemToRead);
+			if (iter != state->inventory->itemList.end()) {
+				//do whatever the fuck read
+				std::cout << map->itemMap[itemToRead]->writing << std::endl;
+				return;
+			} else {
+				std::cout << "Error" << std::endl;
+				return;
+			}
+		}
+	}
 	std::cout << "Error" << std::endl;
 }
