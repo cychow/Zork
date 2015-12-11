@@ -11,3 +11,7 @@
 zorkAttack::zorkAttack(tinyxml2::XMLElement * element) : zorkTrigger(element) {
 
 }
+
+zorkAttack::zorkAttack() {
+
+}

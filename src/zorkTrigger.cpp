@@ -14,6 +14,12 @@
 #include "tinyxml2/tinyxml2.h"
 
 
+zorkCondition::zorkCondition() {
+	owner = "";
+	has = "";
+	status = "";
+	object = "";
+}
 
 
 zorkCondition::zorkCondition(tinyxml2::XMLElement * element) {
@@ -61,7 +67,22 @@ zorkTrigger::zorkTrigger(tinyxml2::XMLElement * element) {
 	std::cout << "--: trigger." << std::endl;
 	std::cout << "---: type: " << type << std::endl;
 	std::cout << "---: command: " << command << std::endl;
-	generateList(element, printList, "print");
-	generateList(element, actionList, "action");
-	conditions = new zorkCondition(element->FirstChildElement("condition"));
+	if (element->FirstChildElement("print") != NULL) {
+		generateList(element, printList, "print");
+	}
+	if (element->FirstChildElement("action") != NULL) {
+		generateList(element, actionList, "action");
+	}
+	if (element->FirstChildElement("condition") != NULL) {
+		conditions = new zorkCondition(element->FirstChildElement("condition"));
+	} else {
+		conditions = new zorkCondition();
+	}
+}
+
+zorkTrigger::zorkTrigger() {
+	triggered = false;
+	type = "";
+	command = "";
+	conditions = new zorkCondition();
 }

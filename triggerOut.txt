@@ -1,0 +1,111 @@
+Loading file: maps/triggersample.xml
+Successfully loaded maps/triggersample.xml
+--- Populating map ---
+-: Creating room 
+--: name: Entrance
+--: status: 'none'
+--: description: 'Room - Entrance'
+--: type: 'regular'
+--: border: north to Main
+--: item: axe
+----------------------
+-: Creating room 
+--: name: Main
+--: status: 'none'
+--: description: 'Room - Main'
+--: type: 'regular'
+--: border: south to Entrance
+--: border: north to Staircase
+--: container: container
+--: item: sword
+--: creature: dragon
+----------------------
+-: Creating room 
+--: name: Staircase
+--: status: 'none'
+--: description: 'Room - Staircase (exit)'
+--: type: 'exit'
+--: border: south to Main
+--: container: bottle
+--: creature: giant
+----------------------
+-: Creating item 
+--: name: sword
+--: status: 'none'
+--: description: 'none'
+--: writing: 
+----------------------
+-: Creating item 
+--: name: note
+--: status: 'none'
+--: description: 'none'
+--: writing: You found the exit :-)
+----------------------
+-: Creating item 
+--: name: axe
+--: status: 'none'
+--: description: 'none'
+--: writing: 
+----------------------
+-: Creating container 
+--: name: bottle
+--: status: 'none'
+--: description: 'none'
+--: item: note
+----------------------
+-: Creating container 
+--: name: container
+--: status: 'none'
+--: description: 'none'
+----------------------
+-: Creating creature 
+--: name: dragon
+--: status: 'none'
+--: description: 'none'
+--: trigger.
+---: type: single
+---: command: attack dragon with axe
+--: print: the axe is quite sharp
+--: action: take axe
+--: action: attack dragon with axe
+--: action: Game Over
+---: condition: 
+----: owner: 
+----: has: 
+----: object: axe
+----: status: sharp
+--: vulnerability: axe
+----------------------
+-: Creating creature 
+--: name: giant
+--: status: 'none'
+--: description: 'none'
+--: trigger.
+---: type: 
+---: command: 
+--: print: axe got sharper
+--: action: Update axe to sharp
+---: condition: 
+----: owner: inventory
+----: has: yes
+----: object: note
+----: status: 
+----------------------
+Init game state...
+Room - Entrance
+Room - Main
+You don't have a axe.
+Room - Entrance
+Item axe added to inventory.
+Room - Main
+You attack the dragon with your axe.
+dicks
+Room - Staircase (exit)
+bottle contains note.
+Item note added to inventory.
+axe got sharper
+Room - Main
+Room - Entrance
+Room - Main
+You attack the dragon with your axe.
+dicks

@@ -28,14 +28,14 @@ zorkObj::zorkObj(tinyxml2::XMLElement * node) {
 	if (node->FirstChildElement("status") != NULL) {
 		status = node->FirstChildElement("status")->GetText();
 	} else {
-		status = "";
+		status = "none";
 	}
 	std::cout << "--: status: '" << status << "'" << std::endl;
 	// get description
 	if (node->FirstChildElement("description") != NULL) {
 		description = node->FirstChildElement("description")->GetText();
 	} else {
-		description = "";
+		description = "none";
 	}
 	std::cout << "--: description: '" << description << "'" << std::endl;
 

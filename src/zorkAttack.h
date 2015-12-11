@@ -14,6 +14,7 @@
 class zorkAttack : public zorkTrigger {
 public:
 	zorkAttack(tinyxml2::XMLElement * element);
+	zorkAttack();
 };
 
 

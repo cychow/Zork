@@ -21,6 +21,7 @@ public:
 	std::string object;
 	std::string status;
 	zorkCondition(tinyxml2::XMLElement * element);
+	zorkCondition();
 };
 
 
@@ -33,5 +34,6 @@ public:
 	bool triggered;
 	zorkCondition * conditions;
 	zorkTrigger(tinyxml2::XMLElement * element);
+	zorkTrigger();
 };
 #endif /* ZORKTRIGGER_H_ */

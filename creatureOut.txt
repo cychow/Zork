@@ -1,0 +1,108 @@
+Loading file: maps/creaturesample.xml
+Successfully loaded maps/creaturesample.xml
+--- Populating map ---
+-: Creating room 
+--: name: Entrance
+--: status: ''
+--: description: 'Room - Entrance'
+--: type: 'regular'
+--: border: north to Main
+--: item: axe
+----------------------
+-: Creating room 
+--: name: Main
+--: status: ''
+--: description: 'Room - Main'
+--: type: 'regular'
+--: border: south to Entrance
+--: border: north to Staircase
+--: item: sword
+--: creature: dragon
+----------------------
+-: Creating room 
+--: name: Staircase
+--: status: ''
+--: description: 'Room - Staircase (exit)'
+--: type: 'exit'
+--: border: south to Main
+--: container: bottle
+----------------------
+-: Creating item 
+--: name: sword
+--: status: ''
+--: description: ''
+--: writing: 
+----------------------
+-: Creating item 
+--: name: note
+--: status: ''
+--: description: ''
+--: writing: You found the exit :-)
+----------------------
+-: Creating item 
+--: name: axe
+--: status: ''
+--: description: ''
+--: writing: 
+----------------------
+-: Creating container 
+--: name: bottle
+--: status: ''
+--: description: ''
+--: item: note
+----------------------
+-: Creating creature 
+--: name: giant
+--: status: ''
+--: description: ''
+--: trigger.
+---: type: 
+---: command: 
+--: action: Game Over
+--: vulnerability: sword
+--: vulnerability: axe
+----------------------
+-: Creating creature 
+--: name: dragon
+--: status: ''
+--: description: ''
+--: trigger.
+---: type: 
+---: command: 
+--: print: Giant scares you away
+--: action: Add giant to Main
+--: action: s
+--: action: Delete dragon
+--: vulnerability: sword
+--: vulnerability: axe
+----------------------
+Init game state...
+Room - Entrance
+Inventory: empty
+Room - Main
+You don't have a axe.
+Room - Entrance
+Item axe added to inventory.
+Room - Main
+Room - Staircase (exit)
+bottle contains note.
+Item note added to inventory.
+Item axe added to bottle.
+Room - Main
+You don't have a axe.
+You don't see a giant here.
+Item sword added to inventory.
+You attack the dragon with your sword.
+Giant scares you away
+Room - Entrance
+sword dropped.
+Room - Main
+Room - Staircase (exit)
+Item axe added to inventory.
+Room - Main
+axe dropped.
+You don't have a axe.
+Item axe added to inventory.
+You don't see a dragon here.
+You attack the giant with your axe.
+Victory!
