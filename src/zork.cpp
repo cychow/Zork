@@ -456,7 +456,7 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				}
 				intercepted = true;
 				continue;
-				// I'm 90% sure that since I stop all non-command matching triggers from occuring that this block below isn't necessary
+				// I'm 90% sure that since I stop all non-command matching triggers from occurring that this block below isn't necessary
 			} else if (doTrigger) {
 				// do command and do trigger actions by falling through to parsing
 				(*trigger)->triggered = true;
