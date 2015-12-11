@@ -160,38 +160,46 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 			std::cout << std::endl;
 			return;
 		}
-		// open
-		if (lastCommand.find("open") == 0) {
-			if (lastCommand.erase(lastCommand.find_last_not_of(" \n\r\t")+1).length() == 4) {
-				std::cout << "Open what?" << std::endl;
+	// open
+	if (lastCommand.find("open") == 0) {
+		if (lastCommand.erase(lastCommand.find_last_not_of(" \n\r\t")+1).length() == 4) {
+			std::cout << "Open what?" << std::endl;
+			return;
+
+		} else if (lastCommand.find("open exit")) {
+			if (state->currentRoom->type.compare("exit") == 0) {
+				std::cout << "You have found the exit! You win!" << std::endl;
+			}
+			else {
+				std::cout << "There is no exit in here" << std::endl;
+			}
+		} else {
+			std::string containertoOpen = lastCommand.substr(5);
+			if ((map->containerMap.count(containertoOpen)>0)  && (std::find(state->currentRoom->containerList.begin(), state->currentRoom->containerList.end(), containertoOpen) != state->currentRoom->containerList.end())) {
+				auto targetContainer = (map->containerMap)[containertoOpen];
+				std::cout << containertoOpen;
+				if (targetContainer->itemList.size() != 0) {
+					bool first = true;
+					for (auto iter = targetContainer->itemList.begin(); iter != targetContainer->itemList.end(); ++iter) {
+						if (!first) {
+							first = false;
+							std::cout << ", ";
+						} else {
+							std::cout << " contains ";
+						}
+						std::cout << (*iter);
+					}
+					std::cout << "." << std::endl;
+				} else {
+					std::cout << " is empty." << std::endl;
+				}
 				return;
 			} else {
-				std::string containertoOpen = lastCommand.substr(5);
-				if ((map->containerMap.count(containertoOpen)>0)  && (std::find(state->currentRoom->containerList.begin(), state->currentRoom->containerList.end(), containertoOpen) != state->currentRoom->containerList.end())) {
-					auto targetContainer = (map->containerMap)[containertoOpen];
-					std::cout << containertoOpen;
-					if (targetContainer->itemList.size() != 0) {
-						bool first = true;
-						for (auto iter = targetContainer->itemList.begin(); iter != targetContainer->itemList.end(); ++iter) {
-							if (!first) {
-								first = false;
-								std::cout << ", ";
-							} else {
-								std::cout << " contains ";
-							}
-							std::cout << (*iter);
-						}
-						std::cout << "." << std::endl;
-					} else {
-						std::cout << " is empty." << std::endl;
-					}
-					return;
-				} else {
-					std::cout << "Can't find a " << containertoOpen << " to open." << std::endl;
-					return;
-				}
+				std::cout << "Can't find a " << containertoOpen << " to open." << std::endl;
+				return;
 			}
 		}
+	}
 
 		// read command
 		if (lastCommand.find("read") == 0) {
