@@ -19,7 +19,7 @@ zorkItem::zorkItem(tinyxml2::XMLElement * element) : zorkObj(element) {
 		writing = "";
 	}
 
-	std::cout << "--: writing: " << writing << std::endl;
+//	std::cout << "--: writing: " << writing << std::endl;
 	if (element->FirstChildElement("turnon") != NULL) {
 		turnon = new zorkTurnOn(element->FirstChildElement("turnon"));
 	} else {
@@ -30,17 +30,17 @@ zorkItem::zorkItem(tinyxml2::XMLElement * element) : zorkObj(element) {
 }
 
 zorkTurnOn::zorkTurnOn(tinyxml2::XMLElement * element) {
-	std::cout << "--: turnon" << std::endl;
+//	std::cout << "--: turnon" << std::endl;
 	if (element->FirstChildElement("action") != NULL) {
 		action = element->FirstChildElement("action")->GetText();
 	} else {
 		action = "";
 	}
-	std::cout << "---: action: " << action << std::endl;
+//	std::cout << "---: action: " << action << std::endl;
 	if (element->FirstChildElement("print") != NULL) {
 		print = element->FirstChildElement("print")->GetText();
 	} else {
 		print = "";
 	}
-	std::cout << "---: print: " << print << std::endl;
+//	std::cout << "---: print: " << print << std::endl;
 }

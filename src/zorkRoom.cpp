@@ -21,7 +21,7 @@ zorkRoom::zorkRoom (tinyxml2::XMLElement * node) : zorkObj(node) {
 	} else {
 		type = "regular";
 	}
-	std::cout << "--: type: '" << type << "'" << std::endl;
+//	std::cout << "--: type: '" << type << "'" << std::endl;
 	// iterate through the following:
 	// border
 	for(tinyxml2::XMLElement * element = node->FirstChildElement("border"); element != NULL; element = element->NextSiblingElement("border")) {
@@ -47,7 +47,7 @@ zorkRoom::zorkRoom (tinyxml2::XMLElement * node) : zorkObj(node) {
 border::border(tinyxml2::XMLElement * node) {
 	name = node->FirstChildElement("name")->GetText();
 	direction = node->FirstChildElement("direction")->GetText();
-	std::cout << "--: border: " << direction << " to " << name << std::endl;
+//	std::cout << "--: border: " << direction << " to " << name << std::endl;
 }
 
 void zorkRoom::printDescription(bool descriptive) {

@@ -40,10 +40,10 @@ int main(int argc, char* argv[]) {
 	std::string filename;
 	// load XML file
 	if (argc !=2) {
-		std::cout << "Loading default file: sample.txt.xml" << std::endl;
+//		std::cout << "Loading default file: sample.txt.xml" << std::endl;
 		filename = "./maps/sample.txt.xml";
 	} else {
-		std::cout << "Loading file: " << argv[1] << std::endl;
+//		std::cout << "Loading file: " << argv[1] << std::endl;
 		filename = argv[1];
 	}
 	tinyxml2::XMLError errType = mapDoc->LoadFile(filename.c_str());
@@ -53,11 +53,11 @@ int main(int argc, char* argv[]) {
 		//std::cerr << map.GetErrorStr2() << std::endl;
 		return 1;
 	} else {
-		std::cout << "Successfully loaded " << filename << std::endl;
+//		std::cout << "Successfully loaded " << filename << std::endl;
 	}
 	zorkMap::zorkMap * map = new zorkMap::zorkMap(mapDoc);
 	// Game initialization
-	std::cout << "Init game state..." << std::endl;
+//	std::cout << "Init game state..." << std::endl;
 	gameState * state = new gameState();
 	state->won = false;
 	std::string lastCommand;
@@ -382,7 +382,6 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 					auto objIter = map->objectMap[targetObj];
 					if (!(objIter->status.compare(targetStatus))) {
 						//std::cout << "^ this trigger is active ^" << std::endl;
-						(*trigger)->triggered = true;
 						doTrigger = true;
 					} else {
 						//std::cout << "^ this trigger is inactive ^ status is :" << objIter->status << " needs " << targetStatus << std::endl;
@@ -446,6 +445,7 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 			if (!(lastCommand.compare((*trigger)->command)) && (doTrigger) && interceptCommands && !(*trigger)->command.empty()) {
 				std::cout << "Intercepted command " << lastCommand << std::endl;
 				//intercept the command by returning before you do things if it matches and conditions are met
+				(*trigger)->triggered = true;
 				for (auto iter = (*trigger)->printList.begin(); iter != (*trigger)->printList.end(); ++iter) {
 					std::cout << *iter << std::endl;
 				}
@@ -456,8 +456,10 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				}
 				intercepted = true;
 				continue;
+				// I'm 90% sure that since I stop all non-command matching triggers from occuring that this block below isn't necessary
 			} else if (doTrigger) {
 				// do command and do trigger actions by falling through to parsing
+				(*trigger)->triggered = true;
 				for (auto iter = (*trigger)->printList.begin(); iter != (*trigger)->printList.end(); ++iter) {
 					std::cout << *iter << std::endl;
 				}

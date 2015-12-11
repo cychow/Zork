@@ -43,11 +43,11 @@ zorkCondition::zorkCondition(tinyxml2::XMLElement * element) {
 	} else {
 		status = "";
 	}
-	std::cout << "---: condition: " << std::endl;
-	std::cout << "----: owner: " << owner << std::endl;
-	std::cout << "----: has: " << has << std::endl;
-	std::cout << "----: object: " << object << std::endl;
-	std::cout << "----: status: " << status << std::endl;
+//	std::cout << "---: condition: " << std::endl;
+//	std::cout << "----: owner: " << owner << std::endl;
+//	std::cout << "----: has: " << has << std::endl;
+//	std::cout << "----: object: " << object << std::endl;
+//	std::cout << "----: status: " << status << std::endl;
 }
 
 
@@ -64,9 +64,9 @@ zorkTrigger::zorkTrigger(tinyxml2::XMLElement * element) {
 	} else {
 		command = "";
 	}
-	std::cout << "--: trigger." << std::endl;
-	std::cout << "---: type: " << type << std::endl;
-	std::cout << "---: command: " << command << std::endl;
+//	std::cout << "--: trigger." << std::endl;
+//	std::cout << "---: type: " << type << std::endl;
+//	std::cout << "---: command: " << command << std::endl;
 
 	generateList(element, printList, "print");
 	generateList(element, actionList, "action");
