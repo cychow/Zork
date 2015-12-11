@@ -212,6 +212,28 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 				}
 			}
 		}
+
+		// turn on command
+		if (lastCommand.find("turn on") == 0) {
+			if (lastCommand.erase(lastCommand.find_last_not_fo(" \n\r\t")+1).length() == 7) {
+				std::cout << "Turn on what?" << std::endl;
+				return;
+			} else {
+				std::string targetItem = lastCommand.substr(8);
+				// read objects in inventory
+				auto iter = std::find(state->inventory->itemList.begin(), state->inventory->itemList.end(), itemToRead);
+				if (iter != state->inventory->itemList.end()) {
+					//do whatever the fuck turnon command
+					std::cout << map->itemMap[targetItem]->turnon->print << std::endl;
+					parseCommand(map, state, map->itemMap[targetItem]->turnon->action);
+					return;
+				} else {
+					std::cout << "Error" << std::endl;
+					return;
+				}
+
+			}
+		}
 		std::cout << "Error" << std::endl;
 	}
 }
