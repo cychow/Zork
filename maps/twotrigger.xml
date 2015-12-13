@@ -2,14 +2,15 @@
 <map>
   <room>
     <name>Entrance</name>
-    <description>You find yourself at the mouth of a cave and decide that in spite of common sense and any sense of self preservation that you're going to go exploring north into it.  It's a little dark, but luckily there are some torches on the wall.</description>
+    <description>You find yourself at the mouth of a cave and decide that in spite of common sense and any sense of self preservation that you're going to go exploring north into it.  It's a little dark and you very cold, but luckily there are some torches and jackets on the wall.</description>
     <item>torch</item>
+    <item>jacket</item>
     <trigger>
       <type>permanent</type>
       <command>n</command>
       <condition>
         <has>no</has>
-        <object>torch</object>
+        <object>torch or jacket</object>
         <owner>inventory</owner>
       </condition>
       <print>*stumble* need some light...</print>
@@ -61,6 +62,14 @@
       <action>Update torch to inferno</action>
     </turnon>
   </item>
+  <item>
+    <name>jacket</name>
+    <writing>it is so warm and fluffy, and is colored green and pink</writing>
+    <status>warm</warm>
+    <turnon>
+      <print>the coat grew fluffier</print>
+      <action>Update the coat to fluffy_coat<action>
+    </turnon>
   <item>
     <name>explosive</name>
     <writing>turn on for boom :-). Warning!  Keep away from gnomes!</writing>

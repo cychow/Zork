@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<map>
+  <room>
+    <name>Entrance</name>
+    <description>You are a Computer Engineer. Try to survive! In front of you stands Ray Decarlo, you must please him. On the group sit sallen and key. A whiteboard sits to DeCarlo's left.</description>
+    <item>sallen</item>
+    <item>key</item>
+    <container>whiteboard</container>
+    <trigger>
+      <type>permanent</type>
+      <command>n</command>
+      <condition>
+        <object>whiteboard</object>
+        <status>solved</status>
+      </condition>
+      <print>DeCarlo shoves you back</print>
+    </trigger>
+    <border>
+      <direction>north</direction>
+      <name>ece270</name>
+    </border>
+  </room>
+  <room>
+    <name>ece270</name>
+    <description>A huge cavern in Witherall surrounds you, with noises echoing all around; this is ECE 270. A state machine sits in the center of the room. The door to the north is wide open.</description>
+    <item>statemachine</item>
+    <border>
+      <direction>south</direction>
+      <name>Entrance</name>
+    </border>
+    <border>
+      <direction>north</direction>
+      <name>ece337</name>
+    </border>
+  </room>
+  <room>
+    <name>ece337</name>
+    <description>Fear strikes your very soul in this room. There is an unguarded room to the west, and a door with a lock to the north. The mighty Tim is present, and appears to have a pass for the door.</description>
+    <creature>tim</creature>
+    <container>lock</container>
+    <border>
+      <direction>south</direction>
+      <name>ece270</name>
+    </border>
+    <border>
+      <direction>north</direction>
+      <name>senior</name>
+    </border>
+    <border>
+      <direction>west</direction>
+      <name>ece308</name>
+    <border>
+    <trigger>
+      <command>n</command>
+      <type>permanent</type>
+      <condition>
+        <object>lock</object>
+        <status>locked</status>
+      </condition>
+      <print>Lock needs a pass... Tim appears to have one, but maybe there's another one</print>
+    </trigger>
+  </room>
+  <room>
+    <name>ece308</name>
+    <description>This is a pleasant place. In front of you sits a relic of the Gang of Four. The only path out is the door from which you entered the room.</description>
+    <item>relic</item>
+    <border>
+      <direction>east</direction>
+      <name>ece337</name>
+    </border>
+  </room>
+  <room>
+    <type>exit</type>
+    <name>Senior</name>
+    <description>You made it a little more I guess</description>
+    <border>
+      <name>ece337</name>
+      <direction>south</direction>
+    </border>
+  </room>
+  <item>
+    <name>sallen</name>
+    <writing>it hurts your brain to look at</writing>
+  </item>
+  <item>
+    <name>key</name>
+    <writing>this is only a key to DeCarlo's heart</writing>
+  </item>
+  <item>
+    <name>statemachine</name>
+    <writing>looks like it can be used to create a weapon</writing>
+    <turnon>
+      <print>A great weapon arises</print>
+      <action>update statemachine to sword</action>
+    </turnon>
+  </item>
+  <item>
+    <name>relic</name>
+    <writing>looks like it can be used to open something</writing>
+  </item>
+  <container>
+    <name>whiteboard</name>
+    <status>blank</status>
+    <accept>sallen</accept>
+    <accept>key</accept>
+    <trigger>
+      <condition>
+        <has>yes</has>
+        <object>sallen or key</object>
+        <owner>whiteboard</owner>
+      </condition>
+      <print>DeCarlo continues to frown</print>
+    </trigger>
+    <trigger>
+      <condition>
+        <has>yes</has>
+        <object>sallen and key</object>
+        <owner>whiteboard</owner>
+      </condition>
+      <print>DeCarlo finally smiles</print>
+      <action>Update whiteboard to solved</action>
+    </trigger>
+  </container>
+  <container>
+    <name>lock</name>
+    <status>locked</status>
+    <accept>pass</accept>
+    <accept>relic</accept>
+    <trigger>
+      <condition>
+        <has>yes</has>
+        <object>pass or relic</object>
+        <owner>lock</owner>
+      </condition>
+      <print>The lock drops off and the door opens</print>
+      <action>Update lock to unlocked</action>
+    </trigger>
+  </container>
+  <creature>
+    <name>tim</name>
+    <vulnerability>statemachine</vulnerability>
+    <attack>
+      <condition>
+        <object>statemachine</object>
+        <status>sword</status>
+      </condition>
+      <print>The mighty Tim has fallen. He relinquishes a pass</print>
+      <action>Add pass to ece337</action>
+    </attack>
+  </creature>
+</map>
