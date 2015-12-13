@@ -10,7 +10,7 @@
       <command>n</command>
       <condition>
         <has>no</has>
-        <object>torch and jacket</object>
+        <object>torch or jacket</object>
         <owner>inventory</owner>
       </condition>
       <print>*stumble* need some light...</print>
