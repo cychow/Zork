@@ -23,50 +23,50 @@
 #include "zorkObj.h"
 #include "gameState.h"
 
-void parseCommand(zorkMap * map, gameState * gamestate, std::string lastCommand);
-bool checkTriggers(zorkMap * map, gameState * gamestate, std::string lastCommand, bool interceptCommands);
+void parseCommand(zorkMap * this_map, gameState * gamestate, std::string lastCommand);
+bool checkTriggers(zorkMap * this_map, gameState * gamestate, std::string lastCommand, bool interceptCommands);
 
 // list of commands
-void doPut(zorkMap * map, gameState * gamestate, std::vector<std::string> * inputCommandList);
-void doUpdate(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList);
-void doDelete(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList);
-void doAdd(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList);
-void doAttack(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList);
+void doPut(zorkMap * this_map, gameState * gamestate, std::vector<std::string> * inputCommandList);
+void doUpdate(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList);
+void doDelete(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList);
+void doAdd(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList);
+void doAttack(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList);
 
 //using namespace std;
 int main(int argc, char* argv[]) {
 	// PARSE ALL THE THINGS
-	tinyxml2::XMLDocument * mapDoc = new tinyxml2::XMLDocument();
+	tinyxml2::XMLDocument * this_mapDoc = new tinyxml2::XMLDocument();
 	std::string filename;
 	// load XML file
 	if (argc !=2) {
 //		std::cout << "Loading default file: sample.txt.xml" << std::endl;
-		filename = "./maps/sample.txt.xml";
+		filename = "../maps/sample.xml";
 	} else {
 //		std::cout << "Loading file: " << argv[1] << std::endl;
 		filename = argv[1];
 	}
-	tinyxml2::XMLError errType = mapDoc->LoadFile(filename.c_str());
+	tinyxml2::XMLError errType = this_mapDoc->LoadFile(filename.c_str());
 	if (errType != 0) {
 		std::cerr << "ERROR:\tFailed to parse " << filename << "; error " << errType << ": ";
-		std::cerr << mapDoc->ErrorName() << std::endl;
-		//std::cerr << map.GetErrorStr2() << std::endl;
+		std::cerr << this_mapDoc->ErrorName() << std::endl;
+		//std::cerr << this_map.GetErrorStr2() << std::endl;
 		return 1;
 	} else {
 //		std::cout << "Successfully loaded " << filename << std::endl;
 	}
-	zorkMap::zorkMap * map = new zorkMap::zorkMap(mapDoc);
+	zorkMap * this_map = new zorkMap(this_mapDoc);
 	// Game initialization
 //	std::cout << "Init game state..." << std::endl;
 	gameState * state = new gameState();
 	state->won = false;
 	std::string lastCommand;
 	// get first room
-	state->currentRoom = map->findRoom("Entrance");
+	state->currentRoom = this_map->findRoom("Entrance");
 	// display the first room's description
 	// store inventory pointer in gamestate
 	//find inventory
-	for(auto iter = map->containerList.begin(); iter != map->containerList.end(); ++iter) {
+	for(auto iter = this_map->containerList.begin(); iter != this_map->containerList.end(); ++iter) {
 		if (!(*iter)->name.compare("inventory")) {
 			state->inventory = *iter;
 			break;
@@ -76,17 +76,17 @@ int main(int argc, char* argv[]) {
 	state->currentRoom->printDescription();
 	while (!state->won) {
 		std::getline(std::cin, lastCommand);
-		parseCommand(map, state, lastCommand);
-		checkTriggers(map,state,"",true);
+		parseCommand(this_map, state, lastCommand);
+		checkTriggers(this_map,state,"",true);
 	}
 
-	//delete(map);
+	//delete(this_map);
 	return 0;
 }
 
-void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
+void parseCommand(zorkMap * this_map, gameState * state, std::string lastCommand) {
 	// if checktriggers doesn't intercept
-	if (!checkTriggers(map, state, lastCommand, true)) {
+	if (!checkTriggers(this_map, state, lastCommand, true)) {
 		//parse directional commands
 		if (!lastCommand.compare("n") || !lastCommand.compare("s") || !lastCommand.compare("e") || !lastCommand.compare("w")) {
 			std::string dirtoCompare = "";
@@ -102,9 +102,9 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 			for (auto direction = state->currentRoom->borderList.begin(); direction != state->currentRoom->borderList.end(); ++direction) {
 				if(!(*direction)->direction.compare(dirtoCompare)) {
 					// go to the northern room
-					state->currentRoom = map->findRoom((*direction)->name);
+					state->currentRoom = this_map->findRoom((*direction)->name);
 					state->currentRoom->printDescription(true);
-					checkTriggers(map,state,"",false);
+					checkTriggers(this_map,state,"",false);
 					return;
 				}
 			}
@@ -132,8 +132,8 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 				}
 				// check containers in the room
 				for(auto iterContainerString = state->currentRoom->containerList.begin(); iterContainerString != state->currentRoom->containerList.end(); ++iterContainerString) {
-					auto iterContainer = map->containerMap.find((*iterContainerString));
-					if((iterContainer != (map->containerMap.end()))) {
+					auto iterContainer = this_map->containerMap.find((*iterContainerString));
+					if((iterContainer != (this_map->containerMap.end()))) {
 						//found the container
 						for(auto iterItem = (*iterContainer).second->itemList.begin(); iterItem != (*iterContainer).second->itemList.end(); ++iterItem) {
 							if (!(*iterItem).compare(itemToFind)) {
@@ -191,8 +191,8 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 
 				return;
 			}
-			if ((map->containerMap.count(containertoOpen)>0)  && (std::find(state->currentRoom->containerList.begin(), state->currentRoom->containerList.end(), containertoOpen) != state->currentRoom->containerList.end())) {
-				auto targetContainer = (map->containerMap)[containertoOpen];
+			if ((this_map->containerMap.count(containertoOpen)>0)  && (std::find(state->currentRoom->containerList.begin(), state->currentRoom->containerList.end(), containertoOpen) != state->currentRoom->containerList.end())) {
+				auto targetContainer = (this_map->containerMap)[containertoOpen];
 				std::cout << containertoOpen;
 				targetContainer->isOpen = true;
 				if (targetContainer->itemList.size() != 0) {
@@ -229,8 +229,8 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 				auto iter = std::find(state->inventory->itemList.begin(), state->inventory->itemList.end(), itemToRead);
 				if (iter != state->inventory->itemList.end()) {
 					//do whatever the fuck read
-					if (map->itemMap[itemToRead]->writing.compare("")) {
-						std::cout << map->itemMap[itemToRead]->writing << std::endl;
+					if (this_map->itemMap[itemToRead]->writing.compare("")) {
+						std::cout << this_map->itemMap[itemToRead]->writing << std::endl;
 					} else {
 						std::cout << "The " << itemToRead << " doesn't have writing on it." << std::endl;
 					}
@@ -253,8 +253,8 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 				auto iter = std::find(state->inventory->itemList.begin(), state->inventory->itemList.end(), targetItem);
 				if (iter != state->inventory->itemList.end()) {
 					//do whatever the fuck turnon command
-					std::cout << map->itemMap[targetItem]->turnon->print << std::endl;
-					parseCommand(map, state, map->itemMap[targetItem]->turnon->action);
+					std::cout << this_map->itemMap[targetItem]->turnon->print << std::endl;
+					parseCommand(this_map, state, this_map->itemMap[targetItem]->turnon->action);
 					return;
 				} else {
 					std::cout << "Error" << std::endl;
@@ -295,26 +295,26 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 		}
 		if (!inputCommandList->at(0).compare("put")) {
 			//std::cout << "running put command with '" << lastCommand << "'" << std::endl;
-			doPut(map, state, inputCommandList);
+			doPut(this_map, state, inputCommandList);
 			return;
 		}
 		if (!inputCommandList->at(0).compare("Update")) {
 			//std::cout << "running Update command with '" << lastCommand << "'" << std::endl;
-			doUpdate(map,state,inputCommandList);
+			doUpdate(this_map,state,inputCommandList);
 			return;
 		}
 		if (!inputCommandList->at(0).compare("Delete")) {
 			//std::cout << "running Delete command with '" << lastCommand << "'" << std::endl;
-			doDelete(map,state,inputCommandList);
+			doDelete(this_map,state,inputCommandList);
 			return;
 		}
 		if (!inputCommandList->at(0).compare("Add")) {
 			//std::cout << "running Add command with '" << lastCommand << "'" << std::endl;
-			doAdd(map,state,inputCommandList);
+			doAdd(this_map,state,inputCommandList);
 			return;
 		}
 		if (!inputCommandList->at(0).compare("attack")) {
-			doAttack(map,state,inputCommandList);
+			doAttack(this_map,state,inputCommandList);
 			return;
 		}
 		if (!lastCommand.compare("Game Over")) {
@@ -326,7 +326,7 @@ void parseCommand(zorkMap * map, gameState * state, std::string lastCommand) {
 	}
 }
 
-bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bool interceptCommands) {
+bool checkTriggers(zorkMap * this_map, gameState * state, std::string lastCommand, bool interceptCommands) {
 	// Check for triggers
 	bool intercepted = false;
 	//std::cout << "Checking for triggers " << std::endl;
@@ -338,12 +338,12 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 	// find triggers in every container in the room
 	for (auto containerIter = state->currentRoom->containerList.begin(); containerIter != state->currentRoom->containerList.end(); ++containerIter) {
 		// find triggers in every item in every container in the room
-		auto currentContainer = map->containerMap[(*containerIter)];
+		auto currentContainer = this_map->containerMap[(*containerIter)];
 		for (auto triggerIter = currentContainer->triggerList.begin(); triggerIter != currentContainer->triggerList.end(); ++triggerIter) {
 			allTriggers->push_back(*triggerIter);
 		}
 		for (auto itemIter = currentContainer->itemList.begin(); itemIter != currentContainer->itemList.end(); ++itemIter) {
-			auto currentItem = map->itemMap[(*itemIter)];
+			auto currentItem = this_map->itemMap[(*itemIter)];
 			for (auto triggerIter = currentItem->triggerList.begin(); triggerIter != currentItem->triggerList.end(); ++triggerIter) {
 				allTriggers->push_back(*triggerIter);
 			}
@@ -351,14 +351,14 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 	}
 	// find triggers for every item loose in the room
 	for (auto itemIter = state->currentRoom->itemList.begin(); itemIter != state->currentRoom->itemList.end(); ++itemIter) {
-		auto currentItem = map->itemMap[(*itemIter)];
+		auto currentItem = this_map->itemMap[(*itemIter)];
 		for (auto triggerIter = currentItem->triggerList.begin(); triggerIter != currentItem->triggerList.end(); ++triggerIter) {
 			allTriggers->push_back(*triggerIter);
 		}
 	}
 	// find triggers for every creature in the room holy shit yay
 	for (auto creatureIter = state->currentRoom->creatureList.begin(); creatureIter != state->currentRoom->creatureList.end(); ++creatureIter) {
-		auto currentCreature = map->creatureMap[(*creatureIter)];
+		auto currentCreature = this_map->creatureMap[(*creatureIter)];
 		for (auto triggerIter = currentCreature->triggerList.begin(); triggerIter != currentCreature->triggerList.end(); ++triggerIter) {
 			allTriggers->push_back(*triggerIter);
 		}
@@ -376,10 +376,10 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				std::string targetObj = (*trigger)->conditions->object;
 				std::string targetStatus = (*trigger)->conditions->status;
 				//std::cout << "Checking Obj/Status Trigger: " << targetObj << " | " << targetStatus << std::endl;
-				if (map->objectMap.count(targetObj) > 0) {
+				if (this_map->objectMap.count(targetObj) > 0) {
 					// found object
 					//std::cout << "found " << targetObj << std::endl;
-					auto objIter = map->objectMap[targetObj];
+					auto objIter = this_map->objectMap[targetObj];
 					if (!(objIter->status.compare(targetStatus))) {
 						//std::cout << "^ this trigger is active ^" << std::endl;
 						doTrigger = true;
@@ -397,7 +397,7 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				zorkObj * owner = NULL;
 				bool isContainer = false;
 				// look through containers to see if it has the item
-				for (auto iter = map->containerList.begin(); iter != map->containerList.end(); ++iter) {
+				for (auto iter = this_map->containerList.begin(); iter != this_map->containerList.end(); ++iter) {
 					if (!(*iter)->name.compare(targetOwner)) {
 						owner = (zorkObj *)(*iter);
 						isContainer = true;
@@ -406,7 +406,7 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				}
 				// now look through rooms to see if it has the item
 				if (owner == NULL) {
-					for (auto iter = map->roomList.begin(); iter != map->roomList.end(); ++iter) {
+					for (auto iter = this_map->roomList.begin(); iter != this_map->roomList.end(); ++iter) {
 						if(!(*iter)->name.compare(targetOwner)) {
 							owner = (zorkObj *)(*iter);
 							break;
@@ -451,8 +451,8 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				}
 				for (auto iter = (*trigger)->actionList.begin(); iter != (*trigger)->actionList.end(); ++iter) {
 					//std::cout << "CHECKING TRIGGERS AFTER ACTIVATING " << (*iter) << std::endl;
-					parseCommand(map, state, (*iter));
-					checkTriggers(map, state, "", false);
+					parseCommand(this_map, state, (*iter));
+					checkTriggers(this_map, state, "", false);
 				}
 				intercepted = true;
 				continue;
@@ -465,8 +465,8 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 				}
 				for (auto iter = (*trigger)->actionList.begin(); iter != (*trigger)->actionList.end(); ++iter) {
 					//std::cout << "CHECKING TRIGGERS AFTER ACTIVATING " << (*iter) << std::endl;
-					parseCommand(map, state, (*iter));
-					checkTriggers(map, state, "", false);
+					parseCommand(this_map, state, (*iter));
+					checkTriggers(this_map, state, "", false);
 				}
 				continue;
 			}
@@ -475,7 +475,7 @@ bool checkTriggers(zorkMap * map, gameState * state, std::string lastCommand, bo
 	}
 	return intercepted;
 }
-void doPut(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList) {
+void doPut(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList) {
 	if (inputCommandList->size() != 4) {
 		std::cout << "Error" << std::endl;
 		return;
@@ -488,7 +488,7 @@ void doPut(zorkMap * map, gameState * state, std::vector<std::string> * inputCom
 			auto iterContainer = std::find(state->currentRoom->containerList.begin(), state->currentRoom->containerList.end(), inputCommandList->at(3));
 			if (!(iterContainer == state->currentRoom->containerList.end())) {
 				//std::cout << "Found " << (*iterContainer) << std::endl;
-				auto container = map->containerMap[inputCommandList->at(3)];
+				auto container = this_map->containerMap[inputCommandList->at(3)];
 				// make sure you can put it in the container
 				auto iterAcceptedItem = std::find((*container).acceptList.begin(), (*container).acceptList.end(), inputCommandList->at(1));
 				if ((iterAcceptedItem != (*container).acceptList.end()) || ((*container).acceptList.size() == 0)) {
@@ -512,10 +512,10 @@ void doPut(zorkMap * map, gameState * state, std::vector<std::string> * inputCom
 	return;
 }
 
-void doUpdate(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList) {
+void doUpdate(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList) {
 	if (inputCommandList->size() == 4) {
-		if (map->objectMap.count(inputCommandList->at(1)) > 0) {
-			map->objectMap[inputCommandList->at(1)]->status = inputCommandList->at(3);
+		if (this_map->objectMap.count(inputCommandList->at(1)) > 0) {
+			this_map->objectMap[inputCommandList->at(1)]->status = inputCommandList->at(3);
 			return;
 		} else {
 			std::cerr << "Can't find object " << inputCommandList->at(1) << std::endl;
@@ -526,15 +526,15 @@ void doUpdate(zorkMap * map, gameState * state, std::vector<std::string> * input
 	}
 }
 
-void doAdd(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList) {
+void doAdd(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList) {
 	if (inputCommandList->size() == 4) {
 		std::string targetObj = inputCommandList->at(1);
 		std::string destObj = inputCommandList ->at(3);
 		std::string destType = "none";
-		if (map->objectMap.count(destObj) > 0) {
-			if (map->containerMap.count(destObj) > 0) {
+		if (this_map->objectMap.count(destObj) > 0) {
+			if (this_map->containerMap.count(destObj) > 0) {
 				destType = "container";
-			} else if (map->roomMap.count(destObj) > 0) {
+			} else if (this_map->roomMap.count(destObj) > 0) {
 				destType = "room";
 			} else {
 				std::cerr << destObj << " isn't a room or a container!" << std::endl;
@@ -544,26 +544,26 @@ void doAdd(zorkMap * map, gameState * state, std::vector<std::string> * inputCom
 			std::cerr << "Couldn't find destination " << destObj << std::endl;
 			return;
 		}
-		if (map->objectMap.count(targetObj) > 0) {
+		if (this_map->objectMap.count(targetObj) > 0) {
 			//found the object
 
 			// check if item
-			if (map->itemMap.count(targetObj) > 0) {
+			if (this_map->itemMap.count(targetObj) > 0) {
 				//is an item
 				if (!destType.compare("container")) {
 					// put it in the container
-					map->containerMap[destObj]->itemList.push_back(targetObj);
+					this_map->containerMap[destObj]->itemList.push_back(targetObj);
 					return;
 				} else {
-					map->roomMap[destObj]->itemList.push_back(targetObj);
+					this_map->roomMap[destObj]->itemList.push_back(targetObj);
 					return;
 				}
 			}
 			// check if container
-			else if (map->containerMap.count(targetObj) > 0) {
+			else if (this_map->containerMap.count(targetObj) > 0) {
 				// is a container
 				if (!destType.compare("room")) {
-					map->roomMap[destObj]->containerList.push_back(targetObj);
+					this_map->roomMap[destObj]->containerList.push_back(targetObj);
 					return;
 				} else {
 					std::cerr << "tried to put container " << targetObj << " in other container " << destObj << std::endl;
@@ -571,9 +571,9 @@ void doAdd(zorkMap * map, gameState * state, std::vector<std::string> * inputCom
 				}
 			}
 			// check if creature
-			else if (map->creatureMap.count(targetObj) > 0) {
+			else if (this_map->creatureMap.count(targetObj) > 0) {
 				if (!destType.compare("room")) {
-					map->roomMap[destObj]->creatureList.push_back(targetObj);
+					this_map->roomMap[destObj]->creatureList.push_back(targetObj);
 					return;
 				} else {
 					std::cerr << "tried to put creature " << targetObj << " in container " << destObj << std::endl;
@@ -594,12 +594,12 @@ void doAdd(zorkMap * map, gameState * state, std::vector<std::string> * inputCom
 	}
 }
 
-void doDelete(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList) {
+void doDelete(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList) {
 	if (inputCommandList->size() == 2) {
 		std::string targetObj = inputCommandList->at(1);
-		if (map->objectMap.count(targetObj) > 0) {
+		if (this_map->objectMap.count(targetObj) > 0) {
 			//delete any border references
-			for (auto roomIter = map->roomList.begin(); roomIter != map->roomList.end(); ++roomIter) {
+			for (auto roomIter = this_map->roomList.begin(); roomIter != this_map->roomList.end(); ++roomIter) {
 				// delete any border references
 				for (auto borderIter = (*roomIter)->borderList.begin(); borderIter != (*roomIter)->borderList.end(); ++borderIter) {
 					if (!(*borderIter)->name.compare(targetObj)) {
@@ -621,7 +621,7 @@ void doDelete(zorkMap * map, gameState * state, std::vector<std::string> * input
 					}
 				}
 				// delete any items in containers
-				for (auto containerIter = map->containerList.begin(); containerIter != map->containerList.end(); ++containerIter) {
+				for (auto containerIter = this_map->containerList.begin(); containerIter != this_map->containerList.end(); ++containerIter) {
 					for (auto itemIter = (*containerIter)->itemList.begin(); itemIter != (*containerIter)->itemList.end(); ++itemIter) {
 						if (!(*itemIter).compare(targetObj)) {
 							(*containerIter)->itemList.erase(itemIter);
@@ -647,7 +647,7 @@ void doDelete(zorkMap * map, gameState * state, std::vector<std::string> * input
 	}
 }
 
-void doAttack(zorkMap * map, gameState * state, std::vector<std::string> * inputCommandList) {
+void doAttack(zorkMap * this_map, gameState * state, std::vector<std::string> * inputCommandList) {
 	if(inputCommandList->size() == 4) {
 		std::string targetCreature = inputCommandList->at(1);
 		std::string targetWeapon = inputCommandList->at(3);
@@ -658,7 +658,7 @@ void doAttack(zorkMap * map, gameState * state, std::vector<std::string> * input
 		}
 		auto creatureIter = std::find(state->currentRoom->creatureList.begin(), state->currentRoom->creatureList.end(), targetCreature);
 		if (creatureIter != state->currentRoom->creatureList.end()) {
-			zorkCreature * creature = map->creatureMap[targetCreature];
+			zorkCreature * creature = this_map->creatureMap[targetCreature];
 			// check for vulnerability -> you have weapon selected and something else
 			auto vulnIter = std::find(creature->vulnerabilityList.begin(), creature->vulnerabilityList.end(), targetWeapon);
 			if (vulnIter != creature->vulnerabilityList.end()) {
@@ -668,13 +668,13 @@ void doAttack(zorkMap * map, gameState * state, std::vector<std::string> * input
 					doAttack = true;
 				} else {
 					//check for these conditions
-					if (map->itemMap.count(creature->attack->conditions->object) > 0) {
+					if (this_map->itemMap.count(creature->attack->conditions->object) > 0) {
 						// check if status equals status
-						if (!(map->itemMap[creature->attack->conditions->object]->status.compare(creature->attack->conditions->status))) {
+						if (!(this_map->itemMap[creature->attack->conditions->object]->status.compare(creature->attack->conditions->status))) {
 							doAttack = true;
 						} else {
 							std::cout << "Your " << targetWeapon << " doesn't seem to be " << creature->attack->conditions->status << ". It's " <<
-									map->itemMap[creature->attack->conditions->object]->status << std::endl;
+									this_map->itemMap[creature->attack->conditions->object]->status << std::endl;
 							return;
 						}
 					} else {
@@ -689,9 +689,9 @@ void doAttack(zorkMap * map, gameState * state, std::vector<std::string> * input
 					}
 					for (auto iter = creature->attack->actionList.begin(); iter != creature->attack->actionList.end(); ++iter) {
 						//std::cout << "Parsing " << (*iter) << std::endl;
-						parseCommand(map, state, (*iter));
+						parseCommand(this_map, state, (*iter));
 						//std::cout << "CHECKING TRIGGERS AFTER ACTIVATING THIS COMMAND!" << std::endl;
-						//checkTriggers(map, state, "", false);
+						//checkTriggers(this_map, state, "", false);
 					}
 					return;
 				} else {
