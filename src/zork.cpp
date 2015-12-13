@@ -87,6 +87,9 @@ int main(int argc, char* argv[]) {
 
 void parseCommand(zorkMap * this_map, gameState * state, std::string lastCommand) {
 	// if checktriggers doesn't intercept
+	if (lastCommand.empty()) {
+		return;
+	}
 	if (!checkTriggers(this_map, state, lastCommand, true)) {
 		//parse directional commands
 		if (!lastCommand.compare("n") || !lastCommand.compare("s") || !lastCommand.compare("e") || !lastCommand.compare("w")) {

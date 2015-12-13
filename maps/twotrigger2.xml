@@ -11,7 +11,7 @@
       <command>n</command>
       <condition>
         <object>whiteboard</object>
-        <status>solved</status>
+        <status>blank</status>
       </condition>
       <print>DeCarlo shoves you back</print>
     </trigger>
@@ -35,7 +35,7 @@
   </room>
   <room>
     <name>ece337</name>
-    <description>Fear strikes your very soul in this room. There is an unguarded room to the west, and a door with a lock to the north. The mighty Tim is present, and appears to have a pass for the door.</description>
+    <description>Fear strikes your very soul in this room. This is ECE 337. There is an unguarded room to the west, and a door with a lock to the north. The mighty Tim is present, and appears to have a pass for the door.</description>
     <creature>tim</creature>
     <container>lock</container>
     <border>
@@ -49,7 +49,7 @@
     <border>
       <direction>west</direction>
       <name>ece308</name>
-    <border>
+    </border>
     <trigger>
       <command>n</command>
       <type>permanent</type>
@@ -71,7 +71,7 @@
   </room>
   <room>
     <type>exit</type>
-    <name>Senior</name>
+    <name>senior</name>
     <description>You made it a little more I guess</description>
     <border>
       <name>ece337</name>
@@ -88,10 +88,11 @@
   </item>
   <item>
     <name>statemachine</name>
-    <writing>looks like it can be used to create a weapon</writing>
+    <status>normal</status>
+    <writing>looks like it can be modified to be pipelined.</writing>
     <turnon>
       <print>A great weapon arises</print>
-      <action>update statemachine to sword</action>
+      <action>Update statemachine to pipelined</action>
     </turnon>
   </item>
   <item>
@@ -142,10 +143,14 @@
     <attack>
       <condition>
         <object>statemachine</object>
-        <status>sword</status>
+        <status>pipelined</status>
       </condition>
       <print>The mighty Tim has fallen. He relinquishes a pass</print>
       <action>Add pass to ece337</action>
     </attack>
   </creature>
+  <item>
+  	<name>pass</name>
+  	<writing>It's a pass for ECE337. Somehow you managed to pass this class.</writing>
+  </item>
 </map>

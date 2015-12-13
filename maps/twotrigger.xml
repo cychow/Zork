@@ -65,10 +65,10 @@
   <item>
     <name>jacket</name>
     <writing>it is so warm and fluffy, and is colored green and pink</writing>
-    <status>warm</warm>
+    <status>warm</status>
     <turnon>
       <print>the coat grew fluffier</print>
-      <action>Update the coat to fluffy_coat<action>
+      <action>Update jacket to fluffy</action>
     </turnon>
   <item>
     <name>explosive</name>
