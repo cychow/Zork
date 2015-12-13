@@ -82,10 +82,20 @@
     <name>lock</name>
     <status>locked</status>
     <accept>key</accept>
+    <accept>explosive</accept>
+    <trigger>
+    	<type>single</type>
+    	<condition>
+    		<has>yes</has>
+    		<object>key or explosive</object>
+    		<owner>lock</owner>
+    	</condition>
+    	<print>The lock doesn't quite open.</print>
+    </trigger>
     <trigger>
       <condition>
         <has>yes</has>
-        <object>key or explosive</object>
+        <object>key and explosive</object>
         <owner>lock</owner>
       </condition>
       <print>The lock drops off and the door opens</print>

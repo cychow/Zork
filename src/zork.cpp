@@ -25,6 +25,7 @@
 
 void parseCommand(zorkMap * this_map, gameState * gamestate, std::string lastCommand);
 bool checkTriggers(zorkMap * this_map, gameState * gamestate, std::string lastCommand, bool interceptCommands);
+std::vector<std::string> * stringSplit(std::string inputString);
 
 // list of commands
 void doPut(zorkMap * this_map, gameState * gamestate, std::vector<std::string> * inputCommandList);
@@ -414,28 +415,73 @@ bool checkTriggers(zorkMap * this_map, gameState * state, std::string lastComman
 					}
 				}
 				if (owner != NULL) {
-					bool foundObj = false;
-					//std::cout << "Owner found: " << owner->name << std::endl;
-					if (isContainer) {
-						for (auto iter = ((zorkContainer *)owner)->itemList.begin(); iter != ((zorkContainer *)owner)->itemList.end(); ++iter) {
-							if (!(*iter).compare(targetObject)) {
-								foundObj = true;
+					std::vector<std::string> * objectsToFind = stringSplit(targetObject);
+					if (objectsToFind->size() == 1) {
+						bool foundObj = false;
+						//std::cout << "Owner found: " << owner->name << std::endl;
+						if (isContainer) {
+							for (auto iter = ((zorkContainer *)owner)->itemList.begin(); iter != ((zorkContainer *)owner)->itemList.end(); ++iter) {
+								if (!(*iter).compare(targetObject)) {
+									foundObj = true;
+								}
 							}
+						} else {
+							for (auto iter = ((zorkRoom *)owner)->itemList.begin(); iter != ((zorkRoom *)owner)->itemList.end(); ++iter) {
+								if (!(*iter).compare(targetObject)) {
+									foundObj = true;
+								}
+							}
+						}
+						// if you've found the object and the trigger has is true OR if you haven't found the object and the trigger has is 'no'
+						if ((foundObj && !targetHas.compare("yes")) || (!foundObj && !targetHas.compare("no"))) {
+							//(*trigger)->triggered = true;
+							doTrigger = true;
+						}
+					} else if (objectsToFind->size() == 3) {
+						// check if and/or
+						// find the object
+						std::string objectArray[2] = {objectsToFind->at(0), objectsToFind->at(2)};
+						bool foundObj[2] = {false, false};
+						for (int i = 0; i < 2; i++) {
+							//find both objects
+							//std::cout << "Owner found: " << owner->name << std::endl;
+							if (isContainer) {
+								for (auto iter = ((zorkContainer *)owner)->itemList.begin(); iter != ((zorkContainer *)owner)->itemList.end(); ++iter) {
+									if (!(*iter).compare(objectArray[i])) {
+										foundObj[i] = true;
+										//std::cout << "Found object " << i << ": " << objectArray[i] << std::endl;
+									}
+								}
+							} else {
+								for (auto iter = ((zorkRoom *)owner)->itemList.begin(); iter != ((zorkRoom *)owner)->itemList.end(); ++iter) {
+									if (!(*iter).compare(objectArray[i])) {
+										foundObj[i] = true;
+										//std::cout << "Found object " << i << ": " << objectArray[i] << std::endl;
+									}
+								}
+							}
+						}
+						bool intermediateCheck = false;
+						if (objectsToFind->at(1) == "and") {
+							intermediateCheck = foundObj[0]&&foundObj[1];
+						} else if (objectsToFind->at(1) == "or") {
+							intermediateCheck = foundObj[0]||foundObj[1];
+						} else {
+							std::cerr << "Trigger doesn't want \"and/or\" for some reason. Got " << objectsToFind->at(1) << " instead." << std::endl;
+							continue;
+						}
+						// if you've found the object and the trigger has is true OR if you haven't found the object and the trigger has is 'no'
+						if ((intermediateCheck && !targetHas.compare("yes")) || (!intermediateCheck && !targetHas.compare("no"))) {
+							(*trigger)->triggered = true;
+							doTrigger = true;
 						}
 					} else {
-						for (auto iter = ((zorkRoom *)owner)->itemList.begin(); iter != ((zorkRoom *)owner)->itemList.end(); ++iter) {
-							if (!(*iter).compare(targetObject)) {
-								foundObj = true;
-							}
-						}
-					}
-					// if you've found the object and the trigger has is true OR if you haven't found the object and the trigger has is 'no'
-					if ((foundObj && !targetHas.compare("yes")) || (!foundObj && !targetHas.compare("no"))) {
-						(*trigger)->triggered = true;
-						doTrigger = true;
+						std::cerr << "Something went wrong in the object AND/OR check, its size isn't 1 or 3 (" << targetObject << ")" << std::endl;
+						continue;
 					}
 				} else {
 					std::cerr << "Something went wrong in the owner/has/object trigger; couldn't find owner '" << targetOwner << "'." << std::endl;
+					continue;
 				}
 			}
 			if (!(*trigger)->command.empty() && (*trigger)->command.compare(lastCommand)) {
@@ -443,7 +489,7 @@ bool checkTriggers(zorkMap * this_map, gameState * state, std::string lastComman
 				continue;
 			}
 			if (!(lastCommand.compare((*trigger)->command)) && (doTrigger) && interceptCommands && !(*trigger)->command.empty()) {
-				std::cout << "Intercepted command " << lastCommand << std::endl;
+				//std::cout << "Intercepted command " << lastCommand << std::endl;
 				//intercept the command by returning before you do things if it matches and conditions are met
 				(*trigger)->triggered = true;
 				for (auto iter = (*trigger)->printList.begin(); iter != (*trigger)->printList.end(); ++iter) {
@@ -709,4 +755,14 @@ void doAttack(zorkMap * this_map, gameState * state, std::vector<std::string> * 
 		return;
 	}
 	return;
+}
+
+std::vector<std::string> * stringSplit(std::string inputString) {
+	std::vector<std::string> * stringList = new std::vector<std::string>;
+	std::istringstream f(inputString);
+	std::string s;
+	while (getline(f, s, ' '))	{
+		stringList->push_back(s);
+	}
+	return stringList;
 }
